@@ -1,0 +1,6 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+content_similarity.pkl
+Books.csv
+books.pkl

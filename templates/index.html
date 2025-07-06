@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Top 50 Books{% endblock %}
+
+{% block content %}
+<!-- ✅ Highlight Box Section -->
+<div class="p-4 mb-5 rounded text-center" style="background-color: #1abc9c; color: white;">
+    <h2 class="fw-bold">📚 Discover the Top 50 Most Loved Books!</h2>
+    <p class="mb-0">Curated from thousands of ratings and reviews. Updated regularly.</p>
+</div>
+
+<!-- ✅ Grid of Books -->
+<div class="row g-4">
+    {% for i in range(book_name|length) %}
+    <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card">
+            <img class="card-img-top" src="{{image[i]}}" alt="Book cover for {{book_name[i]}}">
+            <div class="card-body">
+                <h5>{{book_name[i] | upper}}</h5>
+                <p>{{author[i]}}</p>
+                <p class="stats">Votes: {{votes[i]}} &nbsp;&nbsp; | &nbsp;&nbsp; Rating: {{ '%.1f' % rating[i] }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
