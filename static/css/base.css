@@ -1,0 +1,70 @@
+body {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #e0e0e0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 130px;
+}
+
+.navbar-custom-top {
+    background-color: #1abc9c;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.navbar-custom-second {
+    background-color: #145a5a;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.navbar-custom-top .nav-link,
+.navbar-custom-top .navbar-brand,
+.navbar-custom-second .nav-link {
+    color: #fff;
+    font-weight: 600;
+}
+
+.navbar-custom-top .nav-link:hover,
+.navbar-custom-second .nav-link:hover {
+    color: #d1f2eb;
+}
+
+.dropdown-menu {
+    background-color: #1a1a1a;
+}
+
+.dropdown-item {
+    color: #e0e0e0;
+}
+
+.dropdown-item:hover {
+    background-color: #16a085;
+}
+
+.custom-section {
+    background-color: #102f3f;
+    padding: 60px 20px;
+    border-top: 3px solid #1abc9c;
+}
+
+.form-control, 
+.form-control:focus {
+    background-color: #1c1c1c;
+    color: #fff;
+    border: 1px solid #16a085;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #b2dfdb;
+}
+
+.btn-custom {
+    background-color: #1abc9c;
+    border: none;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-custom:hover {
+    background-color: #16a085;
+}

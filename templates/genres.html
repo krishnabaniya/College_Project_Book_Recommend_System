@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Browse by Genres{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="text-center"><i class="fa-solid fa-filter"></i> Browse by Genre</h1>
+
+    <label for="genre-filter" class="form-label">Select Genre:</label>
+    <select id="genre-filter" class="form-select mb-4">
+        <option value="All">All</option>
+        <option value="Romantic">Romantic</option>
+        <option value="Science Fiction">Science Fiction</option>
+        <option value="Fantasy">Fantasy</option>
+        <option value="Thriller">Thriller</option>
+        <option value="Historical">Historical</option>
+    </select>
+
+    <div class="row" id="book-grid">
+        {% for book in books %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4 book-card" data-genre="{{ book['Genre'] }}" style="display:none;">
+            <div class="card h-100">
+                <img class="card-img-top" src="{{ book['Image-URL-M'] }}" alt="Cover for {{ book['Book-Title'] }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book['Book-Title'] }}</h5>
+                    <p class="card-text"><strong>Author:</strong> {{ book['Book-Author'] }}</p>
+                    <p class="card-text"><strong>Genre:</strong> {{ book['Genre'] }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-warning" id="show-more">Show More</button>
+    </div>
+</div>
+
+<script>
+    const genreFilter = document.getElementById("genre-filter");
+    const bookCards = document.querySelectorAll(".book-card");
+    let visibleCount = 0;
+    const batchSize = 10;
+
+    function filterBooks() {
+        const selected = genreFilter.value;
+        visibleCount = 0;
+        let shown = 0;
+        bookCards.forEach(card => {
+            const genre = card.dataset.genre;
+            if (selected === "All" || genre === selected) {
+                card.style.display = shown < batchSize ? "block" : "none";
+                if (shown < batchSize) shown++;
+            } else {
+                card.style.display = "none";
+            }
+        });
+        visibleCount = shown;
+        updateShowMore();
+    }
+
+    function updateShowMore() {
+        const selected = genreFilter.value;
+        const totalMatching = Array.from(bookCards).filter(card => 
+            selected === "All" || card.dataset.genre === selected
+        ).length;
+
+        document.getElementById("show-more").style.display = visibleCount < totalMatching ? "inline-block" : "none";
+    }
+
+    document.getElementById("show-more").addEventListener("click", () => {
+        const selected = genreFilter.value;
+        let shown = 0;
+        for (let i = visibleCount; i < bookCards.length; i++) {
+            const card = bookCards[i];
+            const genre = card.dataset.genre;
+            if (selected === "All" || genre === selected) {
+                if (card.style.display === "none" && shown < batchSize) {
+                    card.style.display = "block";
+                    shown++;
+                    visibleCount++;
+                }
+            }
+        }
+        updateShowMore();
+    });
+
+    genreFilter.addEventListener("change", filterBooks);
+
+    window.addEventListener("load", filterBooks);
+</script>
+{% endblock %}

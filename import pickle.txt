@@ -1,0 +1,4 @@
+import pickle
+with open('books.pkl', 'rb') as f:
+    books = pickle.load(f)
+print(type(books))

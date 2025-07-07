@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">📚 Top Rated Books</h2>
+    <div class="row">
+        {% for book in books %}
+        <div class="col-md-6 mb-4">
+            <div class="card" style="height: 100%;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{ book['Image-URL-M'] }}" alt="{{ book['Book-Title'] }}" class="img-fluid rounded-start" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book['Book-Title'] }}</h5>
+                            <p class="card-text"><strong>Author:</strong> {{ book['Book-Author'] }}</p>
+                            <p class="card-text"><strong>Year:</strong> {{ book['Year-Of-Publication'] }}</p>
+                            <p class="card-text">
+                                <strong>Rating:</strong> {{ book['avg_rating'] | round(2) }} / 5
+                                ({{ book['num_ratings'] }} votes)
+                            </p>
+                            <p class="card-text"><strong>Genre:</strong> {{ book['Genre'] }}</p>
+                            <!-- Optional about snippet if you have a description column -->
+                            <!-- <p class="card-text">{{ book['About'] | truncate(100) }}</p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('reviews', page=page-1) }}">Previous</a>
+            </li>
+            {% endif %}
+            {% if has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('reviews', page=page+1) }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

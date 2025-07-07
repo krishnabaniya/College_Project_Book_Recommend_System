@@ -1,0 +1,58 @@
+<!-- TOP NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-custom-top fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">📚 Book Recommender</a>
+        <div class="ms-auto">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- SECOND NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-custom-second fixed-top" style="top: 56px;">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#secondNavbar">
+            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="secondNavbar">
+            <!-- Left-side nav items -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('recommend_ui') }}">Recommend</a></li>
+
+                <!-- Genre Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="genreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Genre
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="genreDropdown">
+                        <li><a class="dropdown-item" href="/genre/Romantic"><i class="fa-solid fa-heart text-danger me-1"></i> Romantic</a></li>
+                        <li><a class="dropdown-item" href="/genre/Science%20Fiction"><i class="fa-solid fa-robot text-info me-1"></i> Science Fiction</a></li>
+                        <li><a class="dropdown-item" href="/genre/Fantasy"><i class="fa-solid fa-hat-wizard text-primary me-1"></i> Fantasy</a></li>
+                        <li><a class="dropdown-item" href="/genre/Thriller"><i class="fa-solid fa-mask text-secondary me-1"></i> Thriller</a></li>
+                        <li><a class="dropdown-item" href="/genre/Historical"><i class="fa-solid fa-landmark text-warning me-1"></i> Historical</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('reviews') }}">Reviews</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
+            </ul>
+
+            <!-- Right-side search form -->
+            <form class="d-flex" role="search" method="GET" action="{{ url_for('search') }}">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search books..." aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>

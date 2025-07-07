@@ -1,0 +1,43 @@
+<!-- Main content -->
+<div class="container my-5">
+    {% block content %}{% endblock %}
+</div>
+
+<!-- Contact & About Section -->
+<section class="custom-section">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Contact Form -->
+            <div class="col-md-6">
+                <h4 class="text-info mb-4 fw-bold">📬 Contact Us</h4>
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Email address</label>
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        <input type="text" class="form-control" placeholder="Enter a subject">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-control" rows="4" placeholder="Type your message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-custom">Send Message</button>
+                </form>
+            </div>
+
+            <!-- About Box -->
+            <div class="col-md-6">
+                <h4 class="text-info mb-4 fw-bold">ℹ️ About This Project</h4>
+                <p>This web-based Book Recommendation System helps users explore trending, popular, and personalized books using hybrid filtering methods, including collaborative and content-based algorithms. Users can rate, review, subscribe, and discover books based on their interests and genre preferences.</p>
+                <ul>
+                    <li>📌 Personalized Recommendations</li>
+                    <li>📌 Genre-Based Search</li>
+                    <li>📌 User Reviews and Ratings</li>
+                    <li>📌 Real-time Suggestions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

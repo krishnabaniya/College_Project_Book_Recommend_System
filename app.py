@@ -12,15 +12,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 migrate = Migrate(app, db)
 
-# Load ML data
-popular_df = pickle.load(open('popular.pkl', 'rb'))
-pt = pickle.load(open('pt.pkl', 'rb'))
-books = pickle.load(open('books.pkl', 'rb'))
-similarity_scores = pickle.load(open('similarity_scores.pkl', 'rb'))
+# Load collaborative filtering data
+popular_df = pickle.load(open('popular.pkl', 'rb'))         # Data for popular book display
+pt = pickle.load(open('pt.pkl', 'rb'))                       # Pivot table for recommendations
+books = pickle.load(open('books.pkl', 'rb'))                 # Book metadata for collab filtering
+similarity_scores = pickle.load(open('similarity_scores.pkl', 'rb'))  # Cosine similarity matrix
 
-# Load content-based data
-content_similarity = pickle.load(open('content_similarity.pkl', 'rb'))
-books_content = pickle.load(open('books_content.pkl', 'rb'))
+# Load top-rated books for review section
+with open('top_books.pkl', 'rb') as file:
+    top_books = pickle.load(file)                            # Top-rated books (your review section)
+
+# Load content-based filtering data
+content_similarity = pickle.load(open('content_similarity.pkl', 'rb'))  # Cosine sim for content
+books_content = pickle.load(open('books_content.pkl', 'rb'))            # Book metadata for content
+
 
 # Home route
 @app.route('/')
@@ -105,27 +110,10 @@ def recommend_ui():
     if 'user_id' not in session:
         return redirect('/login')
 
-    genre = request.args.get('genre', 'All')
+    data = []
 
-    # Prepare book data with genre (if available)
-    if 'Genre' in books_content.columns:
-        books_data = books_content[['Book-Title', 'Book-Author', 'Image-URL-M', 'Genre']].drop_duplicates('Book-Title')
-    else:
-        # If Genre column is missing, fallback without genre
-        books_data = books_content[['Book-Title', 'Book-Author', 'Image-URL-M']].drop_duplicates('Book-Title')
-        books_data['Genre'] = 'Unknown'
+    return render_template('recommend.html', data=data)
 
-    if genre != 'All':
-        filtered = books_data[books_data['Genre'] == genre]
-    else:
-        filtered = books_data
-
-    data = [
-        [row['Book-Title'], row['Book-Author'], row['Image-URL-M'], row['Genre']]
-        for _, row in filtered.iterrows()
-    ]
-
-    return render_template('recommend.html', data=data, genre=genre)
 
 # Helper: normalize scores between 0 and 1
 def normalize(scores):
@@ -222,6 +210,68 @@ def search():
         query=query
     )
 
+@app.route('/genre/<name>')
+def genre(name):
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    # Filter books by genre
+    if 'Genre' in books_content.columns:
+        genre_books = books_content[books_content['Genre'].str.lower() == name.lower()]
+    else:
+        genre_books = books_content.copy()
+        genre_books['Genre'] = 'Unknown'
+        genre_books = genre_books[genre_books['Genre'].str.lower() == name.lower()]
+
+    if genre_books.empty:
+        return render_template('recommend.html', data=[], genre=name, error=f"No books found for genre: {name}")
+
+    genre_books = genre_books[['Book-Title', 'Book-Author', 'Image-URL-M']].drop_duplicates('Book-Title')
+
+    data = [
+        [row['Book-Title'], row['Book-Author'], row['Image-URL-M']]
+        for _, row in genre_books.iterrows()
+    ]
+
+    return render_template('recommend.html', data=data, genre=name)
+
+
+# Load preprocessed data once
+books_content = pickle.load(open('books_content.pkl', 'rb'))  # Contains 'avg_rating', 'num_ratings', 'Genre'
+popular_df = pickle.load(open('popular.pkl', 'rb'))  # top rated books filtered already
+
+@app.route('/reviews')
+def reviews():
+    # Load top_books.pkl or prepare the DataFrame in memory beforehand
+    with open('top_books.pkl', 'rb') as f:
+        books_list = pickle.load(f)
+    
+    # Pagination parameters
+    page = int(request.args.get('page', 1))
+    per_page = 10
+    start = (page - 1) * per_page
+    end = start + per_page
+
+    paginated_books = books_list[start:end]
+    has_next = end < len(books_list)
+
+    return render_template(
+        'reviews.html',
+        books=paginated_books,
+        page=page,
+        has_next=has_next
+    )
+
+@app.route('/genres')
+def genres_filter():
+    # Pass all books to the template for filtering
+    books = load_books_data()  # Your function to get books data
+    return render_template('genres.html', books=books)
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 if __name__ == '__main__':
     with app.app_context():
